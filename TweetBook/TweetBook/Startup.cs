@@ -23,11 +23,7 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var installers = typeof(Startup).Assembly.ExportedTypes
-                .Where(t => typeof(IInstaller).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
-                .Select(Activator.CreateInstance).Cast<IInstaller>().ToList();
-
-            installers.ForEach(i => i.InstallServices(services, Configuration));
+            services.InstallServicesInAssembly(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
