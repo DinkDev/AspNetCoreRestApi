@@ -1,8 +1,11 @@
-﻿
-namespace TweetBook.Domain
+﻿namespace TweetBook.Domain
 {
+    using System;
+
     public class Post
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
+
+        public string Name { get; set; }
     }
 }
