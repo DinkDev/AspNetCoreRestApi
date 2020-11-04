@@ -19,6 +19,27 @@
             _postService = postService;
         }
 
+        [HttpPost(ApiRoutes.Posts.Create)]
+        public IActionResult Create([FromBody] CreatePostRequest postRequest)
+        {
+            var post = new Post { Id = postRequest.Id };
+
+            if (post.Id != Guid.Empty)
+            {
+                post.Id = Guid.NewGuid();
+            }
+
+            // TODO: fix this hack
+            _postService.GetPosts().Add(post);
+
+            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            var locationUri = $"{baseUrl}/{ApiRoutes.Posts.Get.Replace("{postId}", post.Id.ToString())}";
+
+            var postResponse = new PostResponse { Id = post.Id };
+
+            return Created(locationUri, postResponse);
+        }
+
         [HttpGet(ApiRoutes.Posts.GetAll)]
         public IActionResult GetAll()
         {
@@ -38,26 +59,25 @@
             return Ok(post);
         }
 
-        // TODO: should have a contract
-        [HttpPost(ApiRoutes.Posts.Create)]
-        public IActionResult Create([FromBody] CreatePostRequest postRequest)
+        [HttpPut(ApiRoutes.Posts.Update)]
+        public IActionResult Update([FromRoute] Guid postId, [FromBody] UpdatePostRequest request)
         {
-            var post = new Post {Id = postRequest.Id};
-
-            if (post.Id != Guid.Empty)
+            var post = new Post
             {
-                post.Id = Guid.NewGuid();
+                Id = postId,
+                Name = request.Name
+            };
+
+            var updated = _postService.UpdatePost(post);
+
+            if (updated)
+            {
+                return Ok(post);
             }
 
-            // TODO: fix this hack
-            _postService.GetPosts().Add(post);
-
-            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var locationUri = $"{baseUrl}/{ApiRoutes.Posts.Get.Replace("{postId}", post.Id.ToString())}";
-
-            var postResponse = new PostResponse {Id = post.Id};
-
-            return Created(locationUri, postResponse);
+            return NotFound();
         }
+
+        // TODO: Delete will go here
     }
 }
