@@ -79,5 +79,18 @@
         }
 
         // TODO: Delete will go here
+        [HttpDelete(ApiRoutes.Posts.Delete)]
+        public IActionResult Delete([FromRoute] Guid postId)
+        {
+            var deleted = _postService.DeletePost(postId);
+
+            if (deleted)
+            {
+                // Can return Ok()/200, or NoContent()
+                return NoContent();
+            }
+
+            return NotFound();
+        }
     }
 }
