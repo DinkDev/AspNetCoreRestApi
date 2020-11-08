@@ -2,16 +2,19 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Domain;
 
     public interface IPostService
     {
-        List<Post> GetPosts();
+        Task<bool> CreatePostAsync(Post post);
 
-        Post GetPostById(Guid postId);
+        Task<List<Post>> GetPostsAsync();
 
-        bool UpdatePost(Post postToUpdate);
+        Task<Post> GetPostByIdAsync(Guid postId);
 
-        bool DeletePost(Guid postId);
+        Task<bool> UpdatePostAsync(Post postToUpdate);
+
+        Task<bool> DeletePostAsync(Guid postId);
     }
 }
