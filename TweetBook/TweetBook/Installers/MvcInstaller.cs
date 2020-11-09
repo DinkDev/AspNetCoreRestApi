@@ -9,6 +9,7 @@
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Options;
+    using Services;
 
     public class MvcInstaller : IInstaller
     {
@@ -16,6 +17,9 @@
         {
             // Load MVC
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            // Load IdentityService
+            services.AddScoped<IIdentityService, IdentityService>();
 
             // load JWT settings
             var jwtSettings = new JwtSettings();
@@ -25,7 +29,7 @@
             // Load JWT authentication support 
             services.AddAuthentication(x =>
                 {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;   // can use in controllers
                     x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
