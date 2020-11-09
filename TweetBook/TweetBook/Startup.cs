@@ -53,6 +53,8 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseAuthentication();
+
             // TODO: Elfocrash - will change this later
             app.UseMvc(routes =>
             {
