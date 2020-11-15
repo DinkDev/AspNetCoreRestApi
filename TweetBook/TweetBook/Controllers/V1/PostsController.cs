@@ -2,15 +2,14 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Mvc;
 
     using Contracts.V1;
     using Contracts.V1.Requests;
     using Contracts.V1.Responses;
-
     using Domain;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Authorization;
     using Services;
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
